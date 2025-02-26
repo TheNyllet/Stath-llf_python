@@ -5,22 +5,22 @@ from utils import *
 ## Indata (Geometry, meterial)
 E = 2.1e11 # N/m^2
 A0 = 7.85e-3 # m^2
-P = 1,5e5 # N
+P = 1.5e5 # N
 L = 2 # m
 
 ## Topology
 Edof = np.array([
-    [0, 0, 2, 2], 
-    [0, 0, 2, 2], 
-    [0, 0, 2, 2], 
-    [0, 0, 2, 2], 
-    [2, 2, 2, 2], 
-    [2, 2, 2, 2], 
-    [2, 2, 2, 2], 
-    [2, 2, 2, 2], 
-    [2, 2, 2, 2], 
-    [2, 2, 2, 2], 
-    [2, 2, 2, 2]
+    [3, 4, 7, 8], 
+    [3, 4, 5, 6], 
+    [1, 2, 7, 8], 
+    [1, 2, 5, 6], 
+    [5, 6, 7, 8], 
+    [5, 6, 9, 10], 
+    [7, 8, 9, 10], 
+    [7, 8, 11, 12], 
+    [9, 10, 11, 12], 
+    [9, 10, 13, 14], 
+    [11, 12, 13, 14]
 ], dtype=int )
 
 # Koordinater för varje nod:
@@ -40,14 +40,14 @@ Ey = np.array([
 
 #Hjälpvariabler:
 nel = len(Ex)  # Antal element
-ndofs = len(Coord) - 4 #Totalt antal frihetsgrader
+ndofs = 2*len(Coord) - 4 #Totalt antal frihetsgrader
 
 # Plot mesh (tips: använd eldraw2 i utils.py)
 
 
 # Fördefinera styvhetsmatrisen och kraftvektorn
-K = np.zeros((4,4))
-f = np.zeros(4)
+K = np.zeros((ndofs,ndofs))
+f = np.zeros(ndofs)
 
 # Assemblera elemented
 for el in range(nel):
@@ -76,19 +76,22 @@ for el in range(nel):
     print(K)
 
 # Lägg till kraften P i lastvektorn:
-...
+f[-1] = -P
 
+# Bestäm bcdofs och bcvals
+bcdofs = np.array([1, 2])  # Exempel på frihetsgrader med randvillkor
+bcvals = np.array([0.0, 0.0])  # Värden för randvillkoren
 
-# Lös ekvations systemet (: använd solveq i utils.py)
-...
-
+# Lös ekvationssystemet (: använd solveq i utils.py)
+a, r = solveq(K, f, bcdofs, bcvals)
 
 # Plotta deformerad mesh (: använd eldisp2 i utils.py)
-...
+eldisp2(Ex, Ey, a)
 
 # Räkna ut krafter och spänningar i varje element
 for el in range(nel):
-    print('hej')
+    N, sigma = bar2s(Ex[el], Ey[el], a[Edof[el, :]])
+    print(f"Element {el}: Kraft = {N}, Spänning = {sigma}")
     #... tips: använd bar2s i utils.py
 
 #osv...
