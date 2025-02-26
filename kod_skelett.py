@@ -94,3 +94,5 @@ for el in range(nel):
     N, sigma = bar2s(Ex[el], Ey[el], a[Edof[el, :]])
     print(f"Element {el}: Kraft = {N}, Spänning = {sigma}")
     #... tips: använd bar2s i utils.py
+
+python suger kuk
