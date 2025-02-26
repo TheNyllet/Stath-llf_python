@@ -71,7 +71,7 @@ for el in range(nel):
     ])
 
     #Assemblera in element styvhetsmatrisen och globala matrisen
-    K = assem(Edof[el, :], K, Ke)
+    K = assem(Edof[el], K, Ke)
 
     print(K)
 
