@@ -88,10 +88,9 @@ a, r = solveq(K, f, bcdofs, bcvals)
 # Plotta deformerad mesh (: använd eldisp2 i utils.py)
 eldisp2(Ex, Ey, a)
 
+
 # Räkna ut krafter och spänningar i varje element
 for el in range(nel):
     N, sigma = bar2s(Ex[el], Ey[el], a[Edof[el, :]])
     print(f"Element {el}: Kraft = {N}, Spänning = {sigma}")
     #... tips: använd bar2s i utils.py
-
-#osv...
