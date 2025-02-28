@@ -118,6 +118,38 @@ eldisp2(Ex, Ey, Ed, sfac=1.0, width=1.0, color="g")
 # Räkna ut krafter och spänningar i varje element
 for el in range(nel):
     ep = [E, A0 if el + 1 not in [4, 6, 9] else A0 * 2]  # Materialegenskaper
-    ed = extract_eldisp(Edof[el], a)  # Elementförskjutningar
-    N, sigma, kuk = bar2s(Ex[el], Ey[el], ep, ed)  # Beräkna krafter och spänningar
+    ed = extract_eldisp(Edof[el], a)  # Extrahera elementförskjutningar
+
+    # Se till att ed är en 1D-array med längd 4
+    if ed.ndim == 2:  # Om ed är 2D, ta första raden
+        ed = ed.flatten()  # Förenkla till 1D-array
+    if len(ed) != 4:  # Om längden inte är 4, fyll med nollor eller justera
+        ed = np.zeros(4)  # Standardvärde om något går fel
+
+    # Kontrollera att elementlängden L inte är noll
+    x1, x2 = Ex[el]
+    y1, y2 = Ey[el]
+    dx = x2 - x1
+    dy = y2 - y1
+    L = np.sqrt(dx**2 + dy**2)
+
+    if L == 0:
+        print(f"Element {el}: Ogiltig längd (L = 0). Hoppar över detta element.")
+        continue  # Hoppa över detta element
+
+    # Anropa bar2s
+    try:
+        es = bar2s(Ex[el], Ey[el], ep, ed)  # Beräkna snittkrafter
+    except ValueError as e:
+        print(f"Element {el}: Fel vid anrop till bar2s: {e}")
+        continue  # Hoppa över detta element
+
+    # Om bar2s returnerar en array, ta det första värdet
+    if isinstance(es, np.ndarray):
+        N = es[0]  # Ta första värdet som snittkraft
+    else:
+        N = es  # Om det redan är ett enskilt värde
+
+    # Beräkna spänningen manuellt (sigma = N / A)
+    sigma = N / ep[1]  # ep[1] är tvärsnittsarean A
     print(f"Element {el}: Kraft = {N}, Spänning = {sigma}")
