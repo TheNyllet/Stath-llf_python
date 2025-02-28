@@ -36,7 +36,7 @@ Ex, Ey = coordxtr(Edof, Coord, np.arange(1, len(Coord) * 2 + 1).reshape(-1, 2))
 
 # Antal element och frihetsgrader
 nel = len(Edof)
-ndofs = 10
+ndofs = 14
 
 # Initialisera styvhetsmatris och lastvektor
 K = np.zeros((ndofs, ndofs))
