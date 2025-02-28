@@ -69,7 +69,7 @@ nel = len(Ex)  # Antal element
 ndofs = 2*len(Coord) #Totalt antal frihetsgrader
 
 # Plot mesh (tips: använd eldraw2 i utils.py)
-
+eldraw2(Ex,Ey)
 
 # Fördefinera styvhetsmatrisen och kraftvektorn
 K = np.zeros((ndofs,ndofs))
@@ -104,8 +104,6 @@ for el in range(nel):
     #Assemblera in element styvhetsmatrisen och globala matrisen
     K = assem(Edof[el], K, Ke)
 
-    print(K)
-
 # Lägg till kraften P i lastvektorn:
 f[12] = -P
 
@@ -117,8 +115,8 @@ bcvals = np.array([0.0, 0.0])  # Värden för randvillkoren
 a, r = solveq(K, f, bcdofs, f)
 
 # Plotta deformerad mesh (: använd eldisp2 i utils.py)
-eldisp2(Ex, Ey, a)
-
+Ed = extract_eldisp(Edof, a)  # Extrahera elementförskjutningar
+eldisp2(Ex, Ey, Ed)
 
 # Räkna ut krafter och spänningar i varje element
 for el in range(nel):
