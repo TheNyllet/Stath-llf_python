@@ -113,7 +113,7 @@ a, r = solveq(K, f, bcdofs, bcvals)
 
 # Plotta deformerad mesh (: använd eldisp2 i utils.py)
 Ed = extract_eldisp(Edof, a)  # Extrahera elementförskjutningar
-eldisp2(Ex, Ey, Ed, sfac=1.0, width=1.0, color="g")
+
 
 # Räkna ut krafter och spänningar i varje element
 for el in range(nel):
@@ -126,17 +126,6 @@ for el in range(nel):
     if len(ed) != 4:  # Om längden inte är 4, fyll med nollor eller justera
         ed = np.zeros(4)  # Standardvärde om något går fel
 
-    # Kontrollera att elementlängden L inte är noll
-    x1, x2 = Ex[el]
-    y1, y2 = Ey[el]
-    dx = x2 - x1
-    dy = y2 - y1
-    L = np.sqrt(dx**2 + dy**2)
-
-    if L == 0:
-        print(f"Element {el}: Ogiltig längd (L = 0). Hoppar över detta element.")
-        continue  # Hoppa över detta element
-
     # Anropa bar2s
     es = bar2s(Ex[el], Ey[el], ep, ed)  # Beräkna snittkrafter
 
@@ -146,11 +135,25 @@ for el in range(nel):
     else:
         N = es  # Om det redan är ett enskilt värde
 
+    if el + 1 in [4, 6, 9]:
+        A = A0 * 2
+    else:
+        A = A0
+
     # Beräkna spänningen manuellt (sigma = N / A)
-    sigma = N / ep[1]  # ep[1] är tvärsnittsarean A
+    sigma = N / A  # ep[1] är tvärsnittsarean A
 
     # Runda och omvandla enheter
     N = round(N/1e3,2) # KN
     sigma = round(sigma/1e6,2) # MPa
 
     print(f"Element {el+1}: Kraft = {N} KN, Spänning = {sigma} MPa")
+
+    if sigma > 0: color = 'r'
+    elif sigma < 0: color = 'b'
+    else: color = 'k'
+    ex =  Ex[el,:] + Ed[el,[0,2]]
+    ey =  Ey[el,:] + Ed[el,[1,3]]
+    plt.plot(ex, ey, color=color)
+
+plt.show()
