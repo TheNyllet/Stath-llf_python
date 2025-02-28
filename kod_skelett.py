@@ -10,17 +10,17 @@ L = 2 # m
 
 ## Topology
 Edof = np.array([
-    [3, 4, 7, 8], 
-    [3, 4, 5, 6], 
-    [1, 2, 7, 8], 
-    [1, 2, 5, 6], 
-    [5, 6, 7, 8], 
-    [5, 6, 9, 10], 
-    [7, 8, 9, 10], 
-    [7, 8, 11, 12], 
-    [9, 10, 11, 12], 
-    [9, 10, 13, 14], 
-    [11, 12, 13, 14]
+    [[3, 4], [7, 8]], 
+    [[3, 4], [5, 6]], 
+    [[1, 2], [7, 8]], 
+    [[1, 2], [5, 6]], 
+    [[5, 6], [7, 8]], 
+    [[5, 6], [9, 10]], 
+    [[7, 8], [9, 10]], 
+    [[7, 8], [11, 12]], 
+    [[9, 10], [11, 12]], 
+    [[9, 10], [13, 14]], 
+    [[11, 12], [13, 14]]
 ], dtype=int )
 
 # Koordinater för varje nod:
@@ -40,7 +40,7 @@ Ey = np.array([
 
 #Hjälpvariabler:
 nel = len(Ex)  # Antal element
-ndofs = 2*len(Coord) - 4 #Totalt antal frihetsgrader
+ndofs = 2*len(Coord) #Totalt antal frihetsgrader
 
 # Plot mesh (tips: använd eldraw2 i utils.py)
 
@@ -64,10 +64,8 @@ for el in range(nel):
     
     #Räkna ut styvhetsmatrisen (Se föreläsningar eller Ekvation 11.18 i kursboken [Hållfasthetslära, Allmänna tillstånd])
     Ke = E*A/L*np.array([
-        [c**2, c*s, -c**2, -c*s],
-        [c*s, s**2, -c*s, -s**2],
-        [-c**2, -c*s, c**2, c*s],
-        [-c*s, -s**2, c*s, s**2]
+        [1,-1],
+        [-1,1]
     ])
 
     #Assemblera in element styvhetsmatrisen och globala matrisen
