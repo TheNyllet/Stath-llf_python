@@ -7,6 +7,7 @@ E = 2.1e11  # N/m^2
 A0 = 7.85e-3  # m^2
 P = 1.5e5  # N
 L = 2  # m
+sigma_s = 2.3e8 #Pa
 
 ## Topology
 Edof = np.array([
@@ -23,7 +24,7 @@ Edof = np.array([
     [11, 12, 13, 14]
 ], dtype=int)
 
-# Koordinater för varje nod:
+# Koordinater för varje nod i numerisk ordning:
 Coord = L * np.array([
     [0.0, 0.0],
     [1.0, 0.0],
@@ -114,6 +115,11 @@ a, r = solveq(K, f, bcdofs, bcvals)
 # Plotta deformerad mesh (: använd eldisp2 i utils.py)
 Ed = extract_eldisp(Edof, a)  # Extrahera elementförskjutningar
 
+# Definera variabler för uppg. 3-5
+max_drag = 0
+max_tryck = 0
+min_sigma = 0
+max_sigma = 0
 
 # Räkna ut krafter och spänningar i varje element
 for el in range(nel):
@@ -143,9 +149,17 @@ for el in range(nel):
     # Beräkna spänningen manuellt (sigma = N / A)
     sigma = N / A  # ep[1] är tvärsnittsarean A
 
+    # Spara beloppet av det högsta sigma
+    if sigma > max_sigma: 
+        max_sigma = sigma
+        max_tryck = el+1
+    elif sigma < min_sigma: 
+        min_sigma = sigma
+        max_drag = el+1
+
     # Runda och omvandla enheter
-    N = round(N/1e3,2) # KN
-    sigma = round(sigma/1e6,2) # MPa
+    N = round(N/1e3,2) # kN
+    sigma = round(sigma/1e6,2) # MPa 
 
     print(f"Element {el+1}: Kraft = {N} KN, Spänning = {sigma} MPa")
 
@@ -155,5 +169,16 @@ for el in range(nel):
     ex =  Ex[el,:] + Ed[el,[0,2]]
     ey =  Ey[el,:] + Ed[el,[1,3]]
     plt.plot(ex, ey, color=color)
+
+print(f'\nStången med högst dragspänning är stång nr. {max_drag}')
+print(f'Stången med högst tryckspänning är stång nr. {max_tryck}')
+
+max_sigma = max(abs(max_sigma),abs(min_sigma))
+
+max_P = round(abs(P*sigma_s/max_sigma)) #kN
+print(f'Fackverket deformerar plastiskt vid P = {max_P/1e3} kN')
+
+min_A0 = round(A0*P/max_P*1e4,1)
+print(f'Med P = 150 kN börjar fackverket deformera vid A0 = {min_A0} cm^2')
 
 plt.show()
