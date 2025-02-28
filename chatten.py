@@ -103,7 +103,7 @@ for el in range(nel):
     K = assem(Edof[el], K, Ke)
 
 # Lägg till kraften P i lastvektorn:
-f[12] = -P
+f[11] = -P
 
 # Bestäm bcdofs och bcvals
 bcdofs = np.array([1, 2, 3, 4])  # Exempel på frihetsgrader med randvillkor
@@ -175,8 +175,8 @@ print(f'Stången med högst tryckspänning är stång nr. {max_tryck}')
 
 max_sigma = max(abs(max_sigma),abs(min_sigma))
 
-max_P = round(abs(P*sigma_s/max_sigma/1e3)) #kN
-print(f'Fackverket deformerar plastiskt vid P = {max_P} kN')
+max_P = round(abs(P*sigma_s/max_sigma)) #kN
+print(f'Fackverket deformerar plastiskt vid P = {max_P/1e3} kN')
 
 min_A0 = round(A0*P/max_P*1e4,1)
 print(f'Med P = 150 kN börjar fackverket deformera vid A0 = {min_A0} cm^2')
