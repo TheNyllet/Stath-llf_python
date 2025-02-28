@@ -138,11 +138,7 @@ for el in range(nel):
         continue  # Hoppa över detta element
 
     # Anropa bar2s
-    try:
-        es = bar2s(Ex[el], Ey[el], ep, ed)  # Beräkna snittkrafter
-    except ValueError as e:
-        print(f"Element {el}: Fel vid anrop till bar2s: {e}")
-        continue  # Hoppa över detta element
+    es = bar2s(Ex[el], Ey[el], ep, ed)  # Beräkna snittkrafter
 
     # Om bar2s returnerar en array, ta det första värdet
     if isinstance(es, np.ndarray):
@@ -152,4 +148,9 @@ for el in range(nel):
 
     # Beräkna spänningen manuellt (sigma = N / A)
     sigma = N / ep[1]  # ep[1] är tvärsnittsarean A
-    print(f"Element {el+1}: Kraft = {N}, Spänning = {sigma}")
+
+    # Runda och omvandla enheter
+    N = round(N/1e3,2) # KN
+    sigma = round(sigma/1e6,2) # MPa
+
+    print(f"Element {el+1}: Kraft = {N} KN, Spänning = {sigma} MPa")
