@@ -25,7 +25,13 @@ Edof = np.array([
 
 # Koordinater för varje nod:
 Coord = L*np.array([
-    [0.0,0.0], [1.0,0.0], [0.0,2.0], [1.0,2.0], [1.0,3.0], [3.0,2.0], [3.0,3.0]
+    [0.0,0.0], 
+    [1.0,0.0], 
+    [0.0,2.0], 
+    [1.0,2.0], 
+    [1.0,3.0], 
+    [3.0,2.0], 
+    [3.0,3.0]
 ])
 
 # x-koordinater för varje element
@@ -57,12 +63,6 @@ Ey = L*np.array([
     [3.0,3.0], 
     [2.0,3.0]
 ])
-
-for i in range(len(Ex)):
-    plt.plot(Ex[i],Ey[i],c='k')
-
-plt.scatter([px for px in Coord[:,0]],[py for py in Coord[:,1]])
-plt.show()
 
 #Hjälpvariabler:
 nel = len(Ex)  # Antal element
@@ -110,11 +110,11 @@ for el in range(nel):
 f[12] = -P
 
 # Bestäm bcdofs och bcvals
-bcdofs = np.array([1, 2])  # Exempel på frihetsgrader med randvillkor
+bcdofs = np.array([i for i in range(1,15)])  # Exempel på frihetsgrader med randvillkor
 bcvals = np.array([0.0, 0.0])  # Värden för randvillkoren
 
 # Lös ekvationssystemet (: använd solveq i utils.py)
-a, r = solveq(K, f, bcdofs, bcvals)
+a, r = solveq(K, f, bcdofs, f)
 
 # Plotta deformerad mesh (: använd eldisp2 i utils.py)
 eldisp2(Ex, Ey, a)
