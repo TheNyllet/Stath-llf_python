@@ -68,13 +68,20 @@ for el in range(nel):
         [-1,1]
     ])
 
+    """
+        [c**2, c*s, -c**2, -c*s],
+        [c*s, s**2, -c*s, -s**2],
+        [-c**2, -c*s, c**2, c*s],
+        [-c*s, -s**2, c*s, s**2]
+    """
+
     #Assemblera in element styvhetsmatrisen och globala matrisen
     K = assem(Edof[el], K, Ke)
 
     print(K)
 
 # Lägg till kraften P i lastvektorn:
-f[-1] = -P
+f[12] = -P
 
 # Bestäm bcdofs och bcvals
 bcdofs = np.array([1, 2])  # Exempel på frihetsgrader med randvillkor
