@@ -149,7 +149,7 @@ for el in range(nel):
     # Beräkna spänningen manuellt (sigma = N / A)
     sigma = N / A  # ep[1] är tvärsnittsarean A
 
-    # Spara beloppet av det högsta sigma
+    # Spara beloppet av det högsta och lägsta sigma samt vilket element som har det
     if sigma > max_sigma: 
         max_sigma = sigma
         max_tryck = el+1
@@ -175,8 +175,8 @@ print(f'Stången med högst tryckspänning är stång nr. {max_tryck}')
 
 max_sigma = max(abs(max_sigma),abs(min_sigma))
 
-max_P = round(abs(P*sigma_s/max_sigma)) #kN
-print(f'Fackverket deformerar plastiskt vid P = {max_P/1e3} kN')
+max_P = round(abs(P*sigma_s/max_sigma/1e3)) #kN
+print(f'Fackverket deformerar plastiskt vid P = {max_P} kN')
 
 min_A0 = round(A0*P/max_P*1e4,1)
 print(f'Med P = 150 kN börjar fackverket deformera vid A0 = {min_A0} cm^2')
