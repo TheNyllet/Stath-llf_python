@@ -40,18 +40,39 @@ def tvarkraft(x):
     
     return V
 
+# Funktion för momentet
+def moment(x):
+    # Numerisk integration av tvärkraften
+    integral = 0
+    step = 0.01  # Stegstorlek för numerisk integration
+    for i in np.arange(0, x, step):
+        integral += tvarkraft(i) * step
+    return integral
+
 # Skapa ett intervall av x-värden
 x_values = np.linspace(0, 14.45, 500)
 
-# Beräkna tvärkraften för varje x-värde
+# Beräkna tvärkraften och momentet för varje x-värde
 V_values = [tvarkraft(x) for x in x_values]
+M_values = [moment(x) for x in x_values]
 
 # Skapa grafen
-plt.plot(x_values, V_values, label="Tvärkraft V(x)", color='b')
-plt.axhline(0, color='k',linewidth=1)  # Noll-linje för att se när tvärkraften byter tecken
-plt.title("Tvärkraft längs balken")
-plt.xlabel("Position längs balken (m)")
-plt.ylabel("Tvärkraft (kN)")
-plt.grid(True)
-plt.legend()
+fig, ax1 = plt.subplots()
+
+# Plot tvärkraften på vänstra y-axeln
+ax1.plot(x_values, V_values, label="Tvärkraft V(x)", color='b')
+ax1.set_xlabel("Position längs balken (m)")
+ax1.set_ylabel("Tvärkraft (kN)", color='b')
+ax1.tick_params(axis='y', labelcolor='b')
+
+# Skapa en andra y-axel för momentet
+ax2 = ax1.twinx()
+ax2.plot(x_values, M_values, label="Moment M(x)", color='r')
+ax2.set_ylabel("Moment (kNm)", color='r')
+ax2.tick_params(axis='y', labelcolor='r')
+
+# Lägg till grid och legend
+ax1.grid(True)
+fig.tight_layout()
+plt.title("Tvärkraft och Moment längs balken")
 plt.show()
