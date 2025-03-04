@@ -78,14 +78,17 @@ f = np.zeros(ndofs)
 
 # Assemblera element
 for el in range(nel):
+    # Hämta elementets koordinater och längd
     x1, x2 = Ex[el]
     y1, y2 = Ey[el]
     L_el = np.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
+    # Beräkna vinkeln theta och cos/sin
     theta = np.arctan2(y2 - y1, x2 - x1)
     c = np.cos(theta)
     s = np.sin(theta)
 
+    # Bestäm tvärsnittsarean A beroende på vilket element det är
     if el + 1 in [4, 6, 9]:
         A = A0 * 2
     else:
@@ -173,14 +176,18 @@ for el in range(nel):
     ey =  Ey[el,:] + Ed[el,[1,3]]
     plt.plot(ex, ey, color=color)
 
+# Skriv ut resultat
 print(f'\nStången med högst dragspänning är stång nr. {max_drag}')
 print(f'Stången med högst tryckspänning är stång nr. {max_tryck}')
 
+# Beräkna maximala spänningen
 max_sigma = max(abs(max_sigma),abs(min_sigma))
 
+# Beräkna maximala kraften
 max_P = round(abs(P*sigma_s/max_sigma)) #kN
 print(f'Fackverket deformerar plastiskt vid P = {max_P/1e3} kN')
 
+# Uppgift 5
 min_A0 = round(A0*P/max_P*1e4,1)
 print(f'Med P = 150 kN börjar fackverket deformera vid A0 = {min_A0} cm^2')
 
