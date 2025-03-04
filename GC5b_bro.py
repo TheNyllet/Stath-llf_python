@@ -10,6 +10,13 @@ z = np.linspace(-h_total/2, h_total/2, 100)  # z-koordinater [mm]
 # Normalspänning
 sigma_z = (M_max * z) / I_y  # Normalspänning [MPa]
 
+# Maximal drag- och tryckspänning
+sigma_max_tension = np.max(sigma_z)  # Maximal dragspänning
+sigma_max_compression = np.min(sigma_z)  # Maximal tryckspänning
+
+print(f"Maximal dragspänning: {sigma_max_tension:.2f} MPa")
+print(f"Maximal tryckspänning: {sigma_max_compression:.2f} MPa")
+
 # Plotta normalspänning
 plt.plot(sigma_z, z, label="Normalspänning")
 plt.xlabel("Normalspänning (MPa)")
@@ -18,10 +25,3 @@ plt.title("Normalspänning över tvärsnittshöjd")
 plt.grid()
 plt.legend()
 plt.show()
-
-# Maximal drag- och tryckspänning
-sigma_max_tension = np.max(sigma_z)  # Maximal dragspänning
-sigma_max_compression = np.min(sigma_z)  # Maximal tryckspänning
-
-print(f"Maximal dragspänning: {sigma_max_tension:.2f} MPa")
-print(f"Maximal tryckspänning: {sigma_max_compression:.2f} MPa")
