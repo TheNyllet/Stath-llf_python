@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Data
-M_max = 510.5e6  # Maximalt böjmoment [Nmm], från GC4c
-I_y = 712506666.7  # Yttröghetsmoment [mm^4], från GC5a
+M_max = 518.9e6 # Maximalt böjmoment [Nmm], från GC4c
+I_y = 758986666.7  # Yttröghetsmoment [mm^4], från GC5a
 h_total = 560  # Total höjd av I-tvärsnittet [mm] (520 mm liv + 2 * 20 mm flänsar)
 z = np.linspace(-h_total/2, h_total/2, 100)  # z-koordinater [mm]
 
