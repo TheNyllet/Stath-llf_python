@@ -1,4 +1,4 @@
-# Program som beräknar maximala dragspänning och tryckspänning i en I-balk
+# Program som beräknar maximala dragspänning och tryckspänning i en I-balk och plottar normalspänningen över tvärsnittet
 # Grupp nummer 87
 # Författare Hugo Nylander och Lucas Molander
 
