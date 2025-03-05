@@ -1,82 +1,71 @@
+#Lucas Molander & Hugo Nylander
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Given data (Givna data)
-L = 14.45  # Längd på balken i meter
-W_s = 6.1     #kN/m
-W_d = 4.47    #kN/m
-W_t = 12.3    #kN/m
+# Given data 
+L = 14.45  # balkens längd
+W_s = 6.1     #kN/m (från uppgift 1)
+W_d = 4.47    #kN/m(från uppgift 1)
+W_t = 12.3    #kN/m(från uppgift 1)
 omega = 0.52
 eta = 0.31
 P = 30      #kN
 total_load = L*(W_d+W_s+omega*W_t) + P
 
-R_a = (L/2) * (W_d + W_s + omega*omega*W_t)+ P* (1-eta)
-R_b = total_load - R_a
-print(f'Rekationskraft vid stöd A: {R_a:.2f} kN')
-print(f'Rekationskraft vid stöd B: {R_b:.2f} kN')
+R_a = (L/2) * (W_d + W_s + omega*omega*W_t)+ P* (1-eta) # Beräkning av R_a enligt ekvation från uppgift 3a
+R_b = total_load - R_a # ENligt ekvation från uppgift 3a
+print(f'Reakationskraft vid stöd A: {R_a:.2f} kN')
+print(f'Reaktionskraft vid stöd B: {R_b:.2f} kN')
 # 1. Kraftjämvikt: R_A + R_B == total_load
-kraft_jamvikt = R_a + R_b
-print(f"Kraftjämvikt: R_A + R_B = {kraft_jamvikt:.2f} kN, förväntat: {total_load:.2f} kN")
+kraft_jamvikt = R_a + R_b - total_load
+print(f"Kraftjämvikt: R_A + R_B - totala lasten = {kraft_jamvikt:.2f} kN (bör vara 0)")
 
-Moment_A =  (L*L) * ((W_d + W_s)/2 + W_t*omega*(1-(omega/2))) + P * eta * L - R_b*L
+Moment_A =  (L*L) * ((W_d + W_s)/2 + W_t*omega*(1-(omega/2))) + P * eta * L - R_b*L #beräkning av momenten vid a och b för att säkerställa jämvikt
 Moment_B = L**2/2 * (W_d + W_s + omega**2*W_t) + P*L*(1-eta) - R_a*L
 print(f'Resulterande moment vid punkt A: {Moment_A} kNm')
 print(f'Resulterande moment vid punkt B: {Moment_B} kNm')
 
-x_P = L * 0.31  # Punktlasten verkar vid x = L*0,31
+x_P = L * eta  # Punktlasten verkar vid x = eta*L
 x_Wt = L* (1-omega) #Trängsellasten börjar verka vid x = L*(1-omega)
-# Definiera x-axeln (position längs balken)
-x = np.linspace(0, L, 1000)  # 1000 punkter från 0 till L
+x = np.linspace(0, L, 1000)  # 1000 punkter jämnt fördelade mellan 0 och L
 
-# Initiera arrayer för tvärkraft (T) och böjmoment (M)
-T = np.zeros_like(x)  # Tvärkraft
-M = np.zeros_like(x)  # Böjmoment
+T = np.zeros_like(x)  # Array för tvärkrafterna 
+M = np.zeros_like(x)  # Array för böjmommentem
 
-# Beräkna tvärkraft (T) och böjmoment (M) längs balken
-for i, xi in enumerate(x):
+for i, xi in enumerate(x): #Beräknar tvärkraft och böjmoment längs balken
     if xi < eta * L:
-        # Region 1: 0 <= x < 0.31L (endast W_d och W_s)
-        T[i] = R_a - (W_d + W_s) * xi
-        M[i] = R_a * xi - 0.5 * (W_d + W_s) * xi**2
+        # Region 1: 0 <= x < eta*L (innan punktlasten)
+        T[i] = (W_d + W_s) * xi - R_a
+        M[i] = 0.5 * (W_d + W_s) * xi**2 - R_a * xi
     elif xi < 0.48 * L:
-        # Region 2: 0.31L <= x < 0.48L (W_d, W_s och P)
-        T[i] = R_a - (W_d + W_s) * xi - P
-        M[i] = R_a * xi - 0.5 * (W_d + W_s) * xi**2 - P * (xi - eta * L)
+        # Region 2: eta*L <= x < (1-omega)*L (innan trängsel lasten)
+        T[i] = (W_d + W_s) * xi - R_a + P
+        M[i] = 0.5 * (W_d + W_s) * xi**2 - R_a * xi + P * (xi - eta * L)
     else:
-        # Region 3: 0.48L <= x <= L (W_d, W_s, W_t och P)
-        T[i] = R_a - (W_d + W_s) * xi - W_t * (xi - 0.48 * L) - P
-        M[i] = R_a * xi - 0.5 * (W_d + W_s) * xi**2 - 0.5 * W_t * (xi - 0.48 * L)**2 - P * (xi - eta * L)
+        # Region 3: Efter trängsellasten till slutet av balken
+        T[i] = (W_d + W_s) * xi + W_t * (xi - 0.48 * L) + P - R_a
+        M[i] = 0.5 * (W_d + W_s) * xi**2 + 0.5 * W_t * (xi - 0.48 * L)**2 - R_a * xi + P * (xi - eta * L)
 
-# Kontrollera global jämvikt (summan av krafter och moment bör vara noll)
-s = R_a + R_b - (W_t+W_s+W_d) * L - P  # Summa av krafter i vertikal led
-sum_moments = R_b * L - (W_t+W_s+W_d) * L * (L / 2) - P * (L / 2)  # Summa av moment kring stöd A
-
-
-# Hitta maximalt böjmoment och dess position
-max_M = np.max(M)  # Maximalt böjmoment
-x_max_M = x[np.argmax(M)]  # Position för maximalt böjmoment
-
+#Hittar maximala tvärkraften och böjmomenten
+tmax = np.max(abs(T))
+print(f'Maximala tvärkraften är {tmax:.2f} kN ')
+max_M = np.max(abs(M))  # Maximalt böjmoment
+x_max_M = x[np.argmax(abs(M))]  # Position för maximalt böjmoment
 print(f"Maximalt böjmoment: {max_M:.2f} kNm vid x = {x_max_M:.2f} m")
 
-# Rita tvärkraftdiagram (T-diagram)
-
-plt.plot(x, T, label="Tvärkraft (T) [kN]", color="blue")
-plt.axhline(0, color="black", linewidth=0.5, linestyle="--")  # Rita en horisontell linje vid 0
+#plottar figurerna enligt beskrivning i uppgiften
+plt.plot(x, T)
+plt.axhline(0, color="black", linewidth=0.5, linestyle="--") 
 plt.title("Tvärkraftdiagram (T-diagram)")
-plt.xlabel("Position längs balken (x) [m]")
-plt.ylabel("Tvärkraft (T) [kN]")
-plt.grid()  # Lägg till ett rutnät
-plt.legend()  # Visa legend
+plt.xlabel("Position längs balken x [m]")
+plt.ylabel("Tvärkraft T(x) [kN]")
+plt.grid()
 plt.show()
 
-# Rita böjmomentdiagram (M-diagram)
-
-plt.plot(x, M, label="Böjmoment (M) [kNm]", color="red")
-plt.axhline(0, color="black", linewidth=0.5, linestyle="--")  # Rita en horisontell linje vid 0
+plt.plot(x, M)
+plt.axhline(0, color="black", linewidth=0.5, linestyle="--")
 plt.title("Böjmomentdiagram (M-diagram)")
-plt.xlabel("Position längs balken (x) [m]")
-plt.ylabel("Böjmoment (M) [kNm]")
-plt.grid()  # Lägg till ett rutnät
-plt.legend()  # Visa legend
+plt.xlabel("Position längs balken [m]")
+plt.ylabel("Böjmoment [kNm]")
+plt.grid()
 plt.show()
