@@ -1,4 +1,7 @@
-#Lucas Molander & Hugo Nylander
+# Program som beräknar maximala tvärkraften och böjmomentet i en balk
+# Grupp nummer 87
+# Författare: Lucas Molander & Hugo Nylander
+
 import numpy as np
 import matplotlib.pyplot as plt
 

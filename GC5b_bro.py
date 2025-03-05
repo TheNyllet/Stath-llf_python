@@ -1,4 +1,6 @@
-# Hugo Nylander & Lucas Molander
+# Program som beräknar maximala dragspänning och tryckspänning i en I-balk
+# Grupp nummer 87
+# Författare Hugo Nylander och Lucas Molander
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -17,6 +19,7 @@ sigma_z = (M_max * d) / I_y  # Normalspänning [MPa]
 sigma_max_tension = np.max(sigma_z)  # Maximal dragspänning
 sigma_max_compression = np.min(sigma_z)  # Maximal tryckspänning
 
+# Skriv ut resultat
 print(f"Maximal dragspänning: {sigma_max_tension:.2f} MPa vid z = {z[np.argmax(sigma_z)]:.2f} mm")
 print(f"Maximal tryckspänning: {sigma_max_compression:.2f} MPa vid z = {z[np.argmin(sigma_z)]:.2f} mm")
 
