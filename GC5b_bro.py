@@ -1,3 +1,5 @@
+# Hugo Nylander & Lucas Molander
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -14,8 +16,9 @@ sigma_z = (M_max * z) / I_y  # Normalspänning [MPa]
 sigma_max_tension = np.max(sigma_z)  # Maximal dragspänning
 sigma_max_compression = np.min(sigma_z)  # Maximal tryckspänning
 
-print(f"Maximal dragspänning: {sigma_max_tension:.2f} MPa")
-print(f"Maximal tryckspänning: {sigma_max_compression:.2f} MPa")
+print(f"Maximal dragspänning: {sigma_max_tension:.2f} MPa vid z = {z[np.argmax(sigma_z)]:.2f} mm")
+print(f"Maximal tryckspänning: {sigma_max_compression:.2f} MPa vid z = {z[np.argmin(sigma_z)]:.2f} mm")
+print(f'Detta sker vid x = {z[np.argmax(sigma_z)]/h_total:.2f}h och x = {z[np.argmin(sigma_z)]/h_total:.2f}h')
 
 # Plotta normalspänning
 plt.plot(z, sigma_z, label="Normalspänning")
