@@ -132,9 +132,7 @@ for el in range(nel):
     # Färga elementet beroende på om det är drag eller tryck
     if sigma > 0: color = 'b' # Blå för tryckspänning
     elif sigma < 0: color = 'r' # Röd för dragspänning
-    else: 
-        color = 'k'
-        sigma = 0
+    else: color = 'k' # Svart för ingen spänning
 
     # Plotta elementen
     ex =  Ex[el,:] + Ed[el,[0,2]]
