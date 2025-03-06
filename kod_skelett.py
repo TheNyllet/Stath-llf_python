@@ -109,10 +109,10 @@ for el in range(nel):
     # Materialegenskaper
     ep = [E, A]
     
-    # Beräkna snittkrafter
+    # Beräkna snittkraften i elementet
     N = bar2s(Ex[el], Ey[el], ep, Ed[el])[0]
 
-    # Beräkna spänningen manuellt (sigma = N / A)
+    # Beräkna spänningen manuellt
     sigma = N / A
 
     # Spara beloppet av det högsta och lägsta sigma samt vilket element som har det
@@ -127,6 +127,7 @@ for el in range(nel):
     N = round(N/1e3,2) # kN
     sigma = round(sigma/1e6,2) # MPa 
 
+    # Skriv ut kraft och spänning för elementet
     print(f"Element {el+1}: Kraft = {N} KN, Spänning = {sigma} MPa")
 
     # Färga elementet beroende på om det är drag eller tryck
@@ -134,9 +135,11 @@ for el in range(nel):
     elif sigma < 0: color = 'r' # Röd för dragspänning
     else: color = 'k' # Svart för ingen spänning
 
-    # Plotta elementen
+    # Lägg till deformerade koordinater
     ex =  Ex[el,:] + Ed[el,[0,2]]
     ey =  Ey[el,:] + Ed[el,[1,3]]
+
+    # Plotta elementen
     plt.plot(ex, ey, color=color, linewidth=width)
 
 # Skriv ut resultat
