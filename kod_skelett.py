@@ -127,6 +127,10 @@ for el in range(nel):
     N = round(N/1e3,2) # kN
     sigma = round(sigma/1e6,2) # MPa 
 
+    # Se till att kraft och spänning skrivs ut snyggare
+    if N == 0: N = 0
+    if sigma == 0: sigma = 0
+
     # Skriv ut kraft och spänning för elementet
     print(f"Element {el+1}: Kraft = {N} KN, Spänning = {sigma} MPa")
 
@@ -135,9 +139,11 @@ for el in range(nel):
     elif sigma < 0: color = 'r' # Röd för dragspänning
     else: color = 'k' # Svart för ingen spänning
 
+    s_fac = 100
+
     # Lägg till deformerade koordinater
-    ex =  Ex[el,:] + Ed[el,[0,2]]
-    ey =  Ey[el,:] + Ed[el,[1,3]]
+    ex =  Ex[el,:] + s_fac*Ed[el,[0,2]]
+    ey =  Ey[el,:] + s_fac*Ed[el,[1,3]]
 
     # Plotta elementen
     plt.plot(ex, ey, color=color, linewidth=width)
