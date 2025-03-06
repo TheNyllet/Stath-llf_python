@@ -154,7 +154,7 @@ max_P = abs(P*sigma_s/max_sigma)
 print(f'Fackverket deformerar plastiskt vid P = {round(max_P/1e3)} kN')
 
 # Uppgift 5
-min_A0 = A0*P/max_P*1e4
-print(f'Med P = 150 kN börjar fackverket deformera vid A0 = {round(min_A0,1)} cm^2')
+min_A0 = A0*P/max_P
+print(f'Med P = 150 kN börjar fackverket deformera vid A0 = {round(min_A0*1e4,1)} cm^2')
 
 plt.show()
