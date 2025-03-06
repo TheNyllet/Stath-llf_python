@@ -7,7 +7,7 @@ E = 2.1e11  # Pa
 A0 = 7.85e-3  # m^2
 P = 1.5e5  # N
 L = 2  # m
-sigma_s = 2.3e8 #Pa
+sigma_s = 2.3e8 # Pa
 
 # Topology
 Edof = np.array([
@@ -106,7 +106,7 @@ for el in range(nel):
     K = assem(Edof[el], K, Ke)
 
 # Lägg till kraften P i lastvektorn:
-f[11] = -P*1000
+f[11] = -P
 
 # Bestäm bcdofs och bcvals
 bcdofs = np.array([i for i in range(1,5)])  # Definera de låsta frihetsgraderna
@@ -132,11 +132,13 @@ for el in range(nel):
     # Anropa bar2s
     N = bar2s(Ex[el], Ey[el], ep, ed)[0]  # Beräkna snittkrafter
 
-
+    # Ändra tvärsnittsarean på vissa element
     if el + 1 in [4, 6, 9]:
         A = A0 * 2
+        width = 2
     else:
         A = A0
+        width = 1
 
     # Beräkna spänningen manuellt (sigma = N / A)
     sigma = N / A
@@ -163,7 +165,7 @@ for el in range(nel):
     # Plotta elementen
     ex =  Ex[el,:] + Ed[el,[0,2]]
     ey =  Ey[el,:] + Ed[el,[1,3]]
-    plt.plot(ex, ey, color=color)
+    plt.plot(ex, ey, color=color, linewidth=width)
 
 # Skriv ut resultat
 print(f'\nStången med högst dragspänning är stång nr. {max_drag}')
