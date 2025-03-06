@@ -118,10 +118,10 @@ for el in range(nel):
     # Spara beloppet av det högsta och lägsta sigma samt vilket element som har det
     if sigma > max_sigma: 
         max_sigma = sigma
-        max_tryck = el+1
+        max_drag = el+1
     elif sigma < min_sigma: 
         min_sigma = sigma
-        max_drag = el+1
+        max_tryck = el+1
 
     # Runda och omvandla enheter
     N = round(N/1e3,2) # kN
@@ -130,9 +130,11 @@ for el in range(nel):
     print(f"Element {el+1}: Kraft = {N} KN, Spänning = {sigma} MPa")
 
     # Färga elementet beroende på om det är drag eller tryck
-    if sigma > 0: color = 'r'
-    elif sigma < 0: color = 'b'
-    else: color = 'k'
+    if sigma > 0: color = 'b' # Blå för tryckspänning
+    elif sigma < 0: color = 'r' # Röd för dragspänning
+    else: 
+        color = 'k'
+        sigma = 0
 
     # Plotta elementen
     ex =  Ex[el,:] + Ed[el,[0,2]]
