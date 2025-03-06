@@ -9,7 +9,7 @@ P = 1.5e5  # N
 L = 2  # m
 sigma_s = 2.3e8 # Pa
 
-# Topology
+# Elementens frihetsgrader i numerisk ordning
 Edof = np.array([
     [3, 4, 7, 8],
     [3, 4, 5, 6],
