@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from utils import *
 
 ## Indata (Geometry, material)
-E = 2.1e11  # N/m^2
+E = 2.1e11  # Pa
 A0 = 7.85e-3  # m^2
 P = 1.5e5  # N
 L = 2  # m
@@ -128,12 +128,6 @@ max_sigma = 0
 for el in range(nel):
     ep = [E, A0 if el + 1 not in [4, 6, 9] else A0 * 2]  # Materialegenskaper
     ed = extract_eldisp(Edof[el], a)  # Extrahera elementförskjutningar
-
-    # Se till att ed är en 1D-array med längd 4
-    if ed.ndim == 2:  # Om ed är 2D, ta första raden
-        ed = ed.flatten()  # Förenkla till 1D-array
-    if len(ed) != 4:  # Om längden inte är 4, fyll med nollor eller justera
-        ed = np.zeros(4)  # Standardvärde om något går fel
 
     # Anropa bar2s
     es = bar2s(Ex[el], Ey[el], ep, ed)  # Beräkna snittkrafter
