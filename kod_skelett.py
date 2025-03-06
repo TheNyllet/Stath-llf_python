@@ -101,7 +101,7 @@ for el in range(nel):
     # Ändra tvärsnittsarean på vissa element
     if el + 1 in [4, 6, 9]:
         A = A0 * 2
-        width = 2
+        width = 2 # Bredd på elementets plot
     else:
         A = A0
         width = 1
