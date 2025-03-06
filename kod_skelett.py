@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from utils import *
 
-## Indata (Geometry, material)
+# Indata
 E = 2.1e11  # Pa
 A0 = 7.85e-3  # m^2
 P = 1.5e5  # N
@@ -65,11 +65,10 @@ Ey = L*np.array([
     [2.0,3.0]
 ])
 
-# Hjälpvariabler:
 nel = len(Ex)  # Antal element
 ndofs = 2 * len(Coord)  # Totalt antal frihetsgrader
 
-# Plot mesh (tips: använd eldraw2 i utils.py)
+# Plot mesh
 eldraw2(Ex, Ey)
 
 # Fördefinera styvhetsmatrisen och kraftvektorn
@@ -108,15 +107,14 @@ for el in range(nel):
 # Lägg till kraften P i lastvektorn:
 f[11] = -P
 
-# Bestäm bcdofs och bcvals
 bcdofs = np.array([i for i in range(1,5)])  # Definera de låsta frihetsgraderna
 bcvals = np.zeros(len(bcdofs))  # Se till att frihetsgraderna är låsta
 
 # Lös ekvationssystemet (: använd solveq i utils.py)
 a = solveq(K, f, bcdofs, bcvals)[0]
 
-# Plotta deformerad mesh (: använd eldisp2 i utils.py)
-Ed = extract_eldisp(Edof, a)  # Extrahera elementförskjutningar
+# Extrahera elementförskjutningar
+Ed = extract_eldisp(Edof, a)
 
 # Definera variabler för uppg. 3-5
 max_drag = 0
@@ -126,12 +124,6 @@ max_sigma = 0
 
 # Räkna ut krafter och spänningar i varje element
 for el in range(nel):
-    ep = [E, A0 if el + 1 not in [4, 6, 9] else A0 * 2]  # Materialegenskaper
-    ed = extract_eldisp(Edof[el], a)  # Extrahera elementförskjutningar
-
-    # Anropa bar2s
-    N = bar2s(Ex[el], Ey[el], ep, ed)[0]  # Beräkna snittkrafter
-
     # Ändra tvärsnittsarean på vissa element
     if el + 1 in [4, 6, 9]:
         A = A0 * 2
@@ -139,6 +131,12 @@ for el in range(nel):
     else:
         A = A0
         width = 1
+
+    # Materialegenskaper
+    ep = [E, A]
+    
+    # Beräkna snittkrafter
+    N = bar2s(Ex[el], Ey[el], ep, Ed[el])[0]
 
     # Beräkna spänningen manuellt (sigma = N / A)
     sigma = N / A
