@@ -109,11 +109,11 @@ for el in range(nel):
 f[11] = -P
 
 # Bestäm bcdofs och bcvals
-bcdofs = np.array([1, 2, 3, 4])  # Exempel på frihetsgrader med randvillkor
-bcvals = np.array([0.0, 0.0, 0.0, 0.0])  # Värden för randvillkoren
+bcdofs = np.array([i for i in range(1,5)])  # Definera de låsta frihetsgraderna
+bcvals = np.zeros(len(bcdofs))  # Se till att frihetsgraderna är låsta
 
 # Lös ekvationssystemet (: använd solveq i utils.py)
-a, r = solveq(K, f, bcdofs, bcvals)
+a = solveq(K, f, bcdofs, bcvals)[0]
 
 # Plotta deformerad mesh (: använd eldisp2 i utils.py)
 Ed = extract_eldisp(Edof, a)  # Extrahera elementförskjutningar
