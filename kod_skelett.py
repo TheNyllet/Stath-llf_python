@@ -22,7 +22,7 @@ Edof = np.array([
     [9, 10, 11, 12],
     [9, 10, 13, 14],
     [11, 12, 13, 14]
-], dtype=int)
+])
 
 # Koordinater för varje nod i numerisk ordning:
 Coord = L * np.array([
