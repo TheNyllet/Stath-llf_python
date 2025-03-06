@@ -9,7 +9,7 @@ P = 1.5e5  # N
 L = 2  # m
 sigma_s = 2.3e8 #Pa
 
-## Topology
+# Topology
 Edof = np.array([
     [3, 4, 7, 8],
     [3, 4, 5, 6],
@@ -35,7 +35,7 @@ Coord = L * np.array([
     [3.0, 3.0]
 ])
 
-# x-koordinater för varje element
+# x-koordinater för varje element i numerisk ordning
 Ex = L*np.array([
     [1.0,1.0], 
     [1.0,0.0], 
@@ -50,7 +50,7 @@ Ex = L*np.array([
     [3.0,3.0]
 ])
 
-# y-koordinater för varje element
+# y-koordinater för varje element i numerisk ordning
 Ey = L*np.array([
     [0.0,2.0], 
     [0.0,2.0], 
@@ -106,7 +106,7 @@ for el in range(nel):
     K = assem(Edof[el], K, Ke)
 
 # Lägg till kraften P i lastvektorn:
-f[11] = -P
+f[11] = -P*1000
 
 # Bestäm bcdofs och bcvals
 bcdofs = np.array([i for i in range(1,5)])  # Definera de låsta frihetsgraderna
