@@ -130,13 +130,8 @@ for el in range(nel):
     ed = extract_eldisp(Edof[el], a)  # Extrahera elementförskjutningar
 
     # Anropa bar2s
-    es = bar2s(Ex[el], Ey[el], ep, ed)  # Beräkna snittkrafter
+    N = bar2s(Ex[el], Ey[el], ep, ed)[0]  # Beräkna snittkrafter
 
-    # Om bar2s returnerar en array, ta det första värdet
-    if isinstance(es, np.ndarray):
-        N = es[0]  # Ta första värdet som snittkraft
-    else:
-        N = es  # Om det redan är ett enskilt värde
 
     if el + 1 in [4, 6, 9]:
         A = A0 * 2
@@ -144,7 +139,7 @@ for el in range(nel):
         A = A0
 
     # Beräkna spänningen manuellt (sigma = N / A)
-    sigma = N / A  # ep[1] är tvärsnittsarean A
+    sigma = N / A
 
     # Spara beloppet av det högsta och lägsta sigma samt vilket element som har det
     if sigma > max_sigma: 
@@ -178,8 +173,8 @@ print(f'Stången med högst tryckspänning är stång nr. {max_tryck}')
 max_sigma = max(abs(max_sigma),abs(min_sigma))
 
 # Beräkna maximala kraften
-max_P = round(abs(P*sigma_s/max_sigma)) #kN
-print(f'Fackverket deformerar plastiskt vid P = {max_P/1e3} kN')
+max_P = round(abs(P*sigma_s/max_sigma/1e3)) # kN
+print(f'Fackverket deformerar plastiskt vid P = {max_P} kN')
 
 # Uppgift 5
 min_A0 = round(A0*P/max_P*1e4,1)
