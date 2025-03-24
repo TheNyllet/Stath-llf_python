@@ -7,12 +7,12 @@ import matplotlib.pyplot as plt
 
 # Given data 
 L = 14.45  # balkens längd
-W_s = 6.1     #kN/m (från uppgift 1)
-W_d = 4.47    #kN/m(från uppgift 1)
-W_t = 12.3    #kN/m(från uppgift 1)
+W_s = 3.07     #kN/m (från uppgift 1)
+W_d = 2.781    #kN/m(från uppgift 1)
+W_t = 6.14    #kN/m(från uppgift 1)
 omega = 0.52
 eta = 0.31
-P = 30      #kN
+P = 15      #kN
 total_load = L*(W_d+W_s+omega*W_t) + P
 
 R_a = (L/2) * (W_d + W_s + omega*omega*W_t)+ P* (1-eta) # Beräkning av R_a enligt ekvation från uppgift 3a
